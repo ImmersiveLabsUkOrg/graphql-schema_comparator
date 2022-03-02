@@ -30,6 +30,8 @@ class GraphQL::SchemaComparator::Diff::SchemaTest < Minitest::Test
       union MyUnion = CType | BType
       interface AnInterface {
         interfaceField: Int!
+        # I will change
+        descChangeField: String
       }
       interface AnotherInterface {
         anotherInterfaceField: String
@@ -102,6 +104,8 @@ class GraphQL::SchemaComparator::Diff::SchemaTest < Minitest::Test
       union MyUnion = CType | DType
       interface AnInterface {
         interfaceField: Int!
+        # I did change
+        descChangeField: String
       }
       interface AnotherInterface {
         b: Int
@@ -162,9 +166,13 @@ class GraphQL::SchemaComparator::Diff::SchemaTest < Minitest::Test
       "Input field `AInput.a` default changed from `1` to `1`",
       "Input field `AInput.a` changed type from `String` to `Int`",
       "`CType` object implements `AnInterface` interface",
+      "Field `AnInterface.descChangeField` description changed from `I will change` to `I did change`",
+      # This is broken: instead we get AnInterface twice
+      "Field `WithInterfaces.descChangeField` description changed from `I will change` to `I did change`",
       "Field `c` was removed from object type `CType`",
       "Field `interfaceField` was added to object type `CType`",
       "Field `b` was added to object type `CType`",
+      "Field `descChangeField` was added to object type `CType`",
       "Deprecation reason on field `CType.a` has changed from `whynot` to `cuz`",
       "Argument `arg: Int` added to field `CType.a`",
       "Default value `10` was added to argument `arg` on field `CType.d`",
